@@ -9,8 +9,17 @@ App Creation functions
 
 ##
 function Install-IntuneWinAppUtility {
+    $utilityPath = "$global:PathSources\IntuneWinAppUtil.exe"
+    $expectedHash = "c1ba45b5cb939e84af064bb7ff4b38fb3dfe33c8dc1078fd9b157672eae671f6"
+
     try {
-        Invoke-WebRequest -Uri "https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool/raw/master/IntuneWinAppUtil.exe" -OutFile "$global:PathSources\IntuneWinAppUtil.exe" | Out-Null
+        Invoke-WebRequest -Uri "https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool/raw/master/IntuneWinAppUtil.exe" -OutFile $utilityPath -UseBasicParsing -ErrorAction Stop
+        $actualHash = (Get-FileHash -Path $utilityPath -Algorithm SHA256).Hash.ToLowerInvariant()
+
+        if ($actualHash -ne $expectedHash.ToLowerInvariant()) {
+            Remove-Item -Path $utilityPath -Force -ErrorAction SilentlyContinue
+            throw "IntuneWinAppUtil hash validation failed. Expected $expectedHash, got $actualHash."
+        }
   
     }catch{
       Write-Error "Loading of the IntuneWinAppUtil failed"
