@@ -1,3 +1,18 @@
+<!-- repo-standard:start -->
+# Intune App Creator
+
+PowerShell tool for automated creation, packaging, and deployment preparation of Intune Win32 apps.
+
+| Area | Stack | Visibility |
+| --- | --- | --- |
+| Endpoint Management | PowerShell, Microsoft Intune | Public |
+
+**Repository:** `JayRHa/intune-app-creator`  
+**Topics:** `microsoft-intune`, `win32`, `app-deployment`, `powershell`, `automation`, `endpoint-management`
+<!-- repo-standard:end -->
+
+---
+
 # Intune-App-Creator
 [Blog Post](https://jannikreinhard.com/2022/08/01/introduction-of-the-chocolatey-intune-app-creator/)
 <p align="left">
