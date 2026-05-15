@@ -20,7 +20,7 @@ Package. Prepare. Deploy.
 
 ## What is this?
 
-This repository provides powerShell tool for automated creation, packaging, and deployment preparation of Intune Win32 apps.
+PowerShell tool for automated creation, packaging, and deployment preparation of Intune Win32 apps.
 
 > Browse the documentation below for setup notes, usage details, and project-specific context.
 
@@ -42,7 +42,7 @@ This repository provides powerShell tool for automated creation, packaging, and 
 
 ## Existing Documentation
 
-# Intune-App-Creator
+# IntuneAppCreator
 [Blog Post](https://jannikreinhard.com/2022/08/01/introduction-of-the-chocolatey-intune-app-creator/)
 <p align="left">
   <a href="https://twitter.com/jannik_reinhard">
