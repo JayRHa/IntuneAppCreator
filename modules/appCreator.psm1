@@ -9,8 +9,17 @@ App Creation functions
 
 ##
 function Install-IntuneWinAppUtility {
+    $utilityPath = "$global:PathSources\IntuneWinAppUtil.exe"
+    $expectedHash = "c1ba45b5cb939e84af064bb7ff4b38fb3dfe33c8dc1078fd9b157672eae671f6"
+
     try {
-        Invoke-WebRequest -Uri "https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool/raw/master/IntuneWinAppUtil.exe" -OutFile "$global:PathSources\IntuneWinAppUtil.exe" | Out-Null
+        Invoke-WebRequest -Uri "https://github.com/microsoft/Microsoft-Win32-Content-Prep-Tool/raw/master/IntuneWinAppUtil.exe" -OutFile $utilityPath -UseBasicParsing -ErrorAction Stop
+        $actualHash = (Get-FileHash -Path $utilityPath -Algorithm SHA256).Hash.ToLowerInvariant()
+
+        if ($actualHash -ne $expectedHash.ToLowerInvariant()) {
+            Remove-Item -Path $utilityPath -Force -ErrorAction SilentlyContinue
+            throw "IntuneWinAppUtil hash validation failed. Expected $expectedHash, got $actualHash."
+        }
   
     }catch{
       Write-Error "Loading of the IntuneWinAppUtil failed"
@@ -23,7 +32,19 @@ function Install-IntuneWinAppUtility {
 function Install-Chocolatey {
     $testchoco = powershell choco -v
     if(-not($testchoco)){
-        Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+        $installerPath = Join-Path $env:TEMP "install-chocolatey.ps1"
+        try {
+            Set-ExecutionPolicy Bypass -Scope Process -Force
+            [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+            Invoke-WebRequest -Uri "https://community.chocolatey.org/install.ps1" -OutFile $installerPath -UseBasicParsing -ErrorAction Stop
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $installerPath
+            if ($LASTEXITCODE -ne 0) {
+                throw "Chocolatey installer failed with exit code $LASTEXITCODE"
+            }
+        }
+        finally {
+            Remove-Item -Path $installerPath -Force -ErrorAction SilentlyContinue
+        }
         choco source remove -n=chocolatey
         choco source add -n=customrepository -s="$global:repositoryUrl"
     }
@@ -95,6 +116,10 @@ function Add-App {
         [Parameter(Mandatory = $true)]
         [String]$appName
     )
+    if ($appName -notmatch '^[A-Za-z0-9_.+-]+$') {
+        throw "Invalid Chocolatey package name: $appName"
+    }
+
     $appNameUpper = $appName.substring(0,1).toupper()+$appName.substring(1).tolower() 
 
     if(Get-AppId -appName $appNameUpper){
@@ -112,10 +137,22 @@ function Add-App {
 
     $installCommand = '$appName = "' + $appName + '"' + "`n" + @'
 $chocoinstall = Get-Command -Name 'choco' -ErrorAction SilentlyContinue -WarningAction SilentlyContinue | Select-Object -ExpandProperty Source
-Invoke-Expression "cmd.exe /c $chocoInstall Install $appName -y" -ErrorAction Stop
+if (-not $chocoInstall) {
+    throw "Chocolatey executable was not found"
+}
+& $chocoInstall install $appName -y --no-progress
+if ($LASTEXITCODE -ne 0) {
+    throw "Chocolatey install failed with exit code $LASTEXITCODE"
+}
 '@
     $installCommand | Out-File "$folder\sources\install.ps1"
-    "choco uninstall $appName -y" | Out-File "$folder\sources\uninstall.ps1"
+    @"
+`$chocoInstall = Get-Command -Name 'choco' -ErrorAction Stop | Select-Object -ExpandProperty Source
+& `$chocoInstall uninstall "$appName" -y --no-progress
+if (`$LASTEXITCODE -ne 0) {
+    throw "Chocolatey uninstall failed with exit code `$LASTEXITCODE"
+}
+"@ | Out-File "$folder\sources\uninstall.ps1"
     
     Start-Sleep -Seconds 1.5
     $intuneWinFile = New-IntuneWin32AppPackage -SourceFolder "$folder\sources" -SetupFile "install.ps1" -OutputFolder $folder -IntuneWinAppUtilPath "$global:PathSources\IntuneWinAppUtil.exe"
@@ -140,7 +177,19 @@ Invoke-Expression "cmd.exe /c $chocoInstall Install $appName -y" -ErrorAction St
 
 
 $global:chocolateyInstallationCommand = @"
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+`$installerPath = Join-Path `$env:TEMP "install-chocolatey.ps1"
+try {
+    Set-ExecutionPolicy Bypass -Scope Process -Force
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+    Invoke-WebRequest -Uri "https://community.chocolatey.org/install.ps1" -OutFile `$installerPath -UseBasicParsing -ErrorAction Stop
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File `$installerPath
+    if (`$LASTEXITCODE -ne 0) {
+        throw "Chocolatey installer failed with exit code `$LASTEXITCODE"
+    }
+}
+finally {
+    Remove-Item -Path `$installerPath -Force -ErrorAction SilentlyContinue
+}
 choco source remove -n=chocolatey
 choco source add -n=customrepos -s=
 "@ + '"' + $global:repositoryUrl + '"'
