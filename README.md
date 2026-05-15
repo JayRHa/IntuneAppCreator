@@ -1,34 +1,34 @@
 <!-- unified-readme:start -->
-    <div align="center">
+<div align="center">
 
-    # Intune App Creator
+# Intune App Creator
 
-    **PowerShell tool for automated creation, packaging, and deployment preparation of Intune Win32 apps.**
+**PowerShell tool for automated creation, packaging, and deployment preparation of Intune Win32 apps.**
 
-    Package. Prepare. Deploy.
+Package. Prepare. Deploy.
 
-    [![GitHub stars](https://img.shields.io/github/stars/JayRHa/IntuneAppCreator?style=for-the-badge&logo=github&color=f4c542)](https://github.com/JayRHa/IntuneAppCreator/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/JayRHa/IntuneAppCreator?style=for-the-badge&logo=github&color=f4c542)](https://github.com/JayRHa/IntuneAppCreator/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/JayRHa/IntuneAppCreator?style=for-the-badge&logo=github&color=4078c0)](https://github.com/JayRHa/IntuneAppCreator/network/members)
 [![GitHub issues](https://img.shields.io/github/issues/JayRHa/IntuneAppCreator?style=for-the-badge&logo=github&color=d73a4a)](https://github.com/JayRHa/IntuneAppCreator/issues)
 [![Contributors](https://img.shields.io/github/contributors/JayRHa/IntuneAppCreator?style=for-the-badge&logo=github&color=28a745)](https://github.com/JayRHa/IntuneAppCreator/graphs/contributors)
 
-    ---
+---
 
-    `Endpoint Management` | `PowerShell` | `Public` | `Maintained`
+`Endpoint Management` | `PowerShell` | `Public` | `Maintained`
 
-    </div>
+</div>
 
-    ## What is this?
+## What is this?
 
-    This repository contains powerShell tool for automated creation, packaging, and deployment preparation of Intune Win32 apps.
+This repository provides powerShell tool for automated creation, packaging, and deployment preparation of Intune Win32 apps.
 
-    > Browse the documentation below for setup notes, usage details, and project-specific context.
+> Browse the documentation below for setup notes, usage details, and project-specific context.
 
-    ---
+---
 
-    ## Quick Start
+## Quick Start
 
-    1. Review the project documentation below.
+1. Review the project documentation below.
 2. Clone the repository:
 
    ```bash
@@ -37,9 +37,8 @@
 
 3. Follow the setup, deployment, or usage notes in the preserved documentation section.
 
-    ---
-    <!-- unified-readme:end -->
-
+---
+<!-- unified-readme:end -->
 
 ## Existing Documentation
 
