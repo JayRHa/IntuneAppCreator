@@ -12,6 +12,12 @@ Package. Prepare. Deploy.
 [![GitHub issues](https://img.shields.io/github/issues/JayRHa/IntuneAppCreator?style=for-the-badge&logo=github&color=d73a4a)](https://github.com/JayRHa/IntuneAppCreator/issues)
 [![Contributors](https://img.shields.io/github/contributors/JayRHa/IntuneAppCreator?style=for-the-badge&logo=github&color=28a745)](https://github.com/JayRHa/IntuneAppCreator/graphs/contributors)
 
+<p>
+  <a href="https://jannikreinhard.com/">Blog</a> ·
+  <a href="https://www.linkedin.com/in/jannik-r/">LinkedIn</a> ·
+  <a href="https://x.com/jannik_reinhard">X</a>
+</p>
+
 ---
 
 `Endpoint Management` | `PowerShell` | `Public` | `Maintained`
@@ -59,7 +65,7 @@ flowchart LR
 # IntuneAppCreator
 [Blog Post](https://jannikreinhard.com/2022/08/01/introduction-of-the-chocolatey-intune-app-creator/)
 <p align="left">
-  <a href="https://twitter.com/jannik_reinhard">
+  <a href="https://x.com/jannik_reinhard">
     <img src="https://img.shields.io/twitter/follow/jannik_reinhard?style=social" target="_blank" />
   </a>
     <a href="https://github.com/JayRHa">
